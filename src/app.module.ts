@@ -20,9 +20,10 @@ const typeOrmModuleOptions = {
     database: configService.get('DB_NAME'),
     entities: [UserEntity],
     synchronize: true, //! set 'false' in production
+    // 마이그레이션 후에는 false로 바꿀 것
     autoLoadEntities: true,
     logging: true,
-    keepConnectionAlive: true,
+    // keepConnectionAlive: true,
   }),
   inject: [ConfigService],
 };
