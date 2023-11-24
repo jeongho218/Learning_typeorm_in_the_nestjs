@@ -2,6 +2,8 @@ import { JwtPayload } from './jwt.payload';
 import { UsersService } from './../users.service';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
+// @nestjs/passport의 설정에 따라
+// guard가 실행될때 strategy도 같이 실행됨
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { jwtExtractorFromCookies } from '../../common/utils/jwtExtractorFromCookies';
 import { ConfigService } from '@nestjs/config';
@@ -14,6 +16,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([jwtExtractorFromCookies]),
+      // jwt 추출은 함수 'jwtExtractorFromCookies'에 따라 진행한다.
       secretOrKey: configService.get('SECRET_KEY'),
       ignoreExpiration: false,
     });

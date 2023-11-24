@@ -29,8 +29,9 @@ class Application {
     this.corsOriginList = process.env.CORS_ORIGIN_LIST
       ? process.env.CORS_ORIGIN_LIST.split(',').map((origin) => origin.trim())
       : ['*'];
-    this.ADMIN_USER = process.env.ADMIN_USER || 'amamov';
-    this.ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '1205';
+    // swagger 접속에 사용될 계정과 패스워드
+    this.ADMIN_USER = process.env.ADMIN_USER;
+    this.ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
   }
 
   private setUpBasicAuth() {
@@ -45,14 +46,15 @@ class Application {
     );
   }
 
-  private setUpOpenAPIMidleware() {
+  // swagger - http://localhost:5000/docs/
+  private setUpOpenAPIMiddleware() {
     SwaggerModule.setup(
       'docs',
       this.server,
       SwaggerModule.createDocument(
         this.server,
         new DocumentBuilder()
-          .setTitle('Yoon Sang Seok - API')
+          .setTitle('ctrs - blog API')
           .setDescription('TypeORM In Nest')
           .setVersion('0.0.1')
           .build(),
@@ -60,6 +62,7 @@ class Application {
     );
   }
 
+  // 미들웨어
   private async setUpGlobalMiddleware() {
     this.server.enableCors({
       origin: this.corsOriginList,
@@ -67,21 +70,23 @@ class Application {
     });
     this.server.use(cookieParser());
     this.setUpBasicAuth();
-    this.setUpOpenAPIMidleware();
+    this.setUpOpenAPIMiddleware();
     this.server.useGlobalPipes(
       new ValidationPipe({
-        transform: true,
+        transform: true, // string으로 들어오는 parameter의 데이터 타입을 변경
       }),
     );
     this.server.use(passport.initialize());
     this.server.use(passport.session());
+
     this.server.useGlobalInterceptors(
       new ClassSerializerInterceptor(this.server.get(Reflector)),
     );
+
     this.server.useGlobalFilters(new HttpApiExceptionFilter());
   }
 
-  async boostrap() {
+  async bootstrap() {
     await this.setUpGlobalMiddleware();
     await this.server.listen(this.PORT);
   }
@@ -102,7 +107,7 @@ class Application {
 async function init(): Promise<void> {
   const server = await NestFactory.create<NestExpressApplication>(AppModule);
   const app = new Application(server);
-  await app.boostrap();
+  await app.bootstrap();
   app.startLog();
 }
 

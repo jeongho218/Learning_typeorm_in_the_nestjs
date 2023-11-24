@@ -57,7 +57,8 @@ select * from public."USER"
 
 - 보일러플레이트 코드 리뷰 및 테스팅 소개
 ```
-
+swagger - http://localhost:5000/docs/
+접속에 필요한 계정과 패스워드는 .env에 작성
 ```
 
 

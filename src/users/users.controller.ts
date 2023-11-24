@@ -19,7 +19,9 @@ import { OnlyPrivateInterceptor } from '../common/interceptors/only-private.inte
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { UserDTO } from './dtos/user.dto';
 import { JwtAuthGuard } from './jwt/jwt.guard';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('USER')
 @Controller('users')
 export class UsersController {
   private readonly logger = new Logger(UsersController.name);
@@ -30,18 +32,22 @@ export class UsersController {
     private readonly usersRepository: Repository<UserEntity>,
   ) {}
 
+  @ApiOperation({ summary: ' 내 정보 가져오기' })
   @Get()
   @UseGuards(JwtAuthGuard)
+  // JwtAuthGuard에서 user를 리턴받아 OnlyPrivateInterceptor에게 넘김
   @UseInterceptors(OnlyPrivateInterceptor)
   async getCurrentUser(@CurrentUser() currentUser: UserDTO) {
     return currentUser;
   }
 
+  @ApiOperation({ summary: '회원가입' })
   @Post()
   async signUp(@Body() userRegisterDTO: UserRegisterDTO) {
     return await this.usersService.registerUser(userRegisterDTO);
   }
 
+  @ApiOperation({ summary: '로그인' })
   @Post('login')
   async logIn(
     @Body() userLoginDTO: UserLogInDTO,
@@ -55,6 +61,7 @@ export class UsersController {
     return user;
   }
 
+  @ApiOperation({ summary: '로그아웃' })
   @Post('logout')
   async logOut(@Res({ passthrough: true }) response: Response) {
     response.clearCookie('jwt');

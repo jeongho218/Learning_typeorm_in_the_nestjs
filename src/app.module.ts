@@ -33,6 +33,7 @@ const typeOrmModuleOptions = {
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: Joi.object({
+        // Joi는 유효성 검사하는 라이브러리
         NODE_ENV: Joi.string()
           .valid('development', 'production', 'test', 'provision')
           .default('development'),

@@ -8,6 +8,7 @@ import {
 import { Request } from 'express';
 import { map, Observable } from 'rxjs';
 
+// admin인지 확인하는 인터셉터, user테이블의 isAdmin을 확인함
 @Injectable()
 export class OnlyAdminInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
