@@ -64,7 +64,40 @@ swagger - http://localhost:5000/docs/
 
 - TDD 소개 및 통합 테스팅
 ```
+TDD 테스트 주도 개발
 
+'@nestjs/testing' 라이브러리
+jest를 nestjs 프레임웨크에서 사용할 수 있도록 도와주는 모듈
+
+/test/app.e2e-spec.ts
+
+describe
+jest의 메인 함수
+테스트의 내용이 들어간다
+
+describe 함수의 콜백으로 describe를 한번 더 넣을 수도 있다
+
+beforeEach
+테스트를 진행하기 전 가장 먼저 실행되는 함수
+
+it
+테스트 단위
+각 테스트의 내용이 들어가는 함수
+이 함수명은 test라고 적어도 같은 역할을 한다
+
+
+현재 코드에선 테스트를 2개 이상 적을 경우
+"EarlyHasActiveConnectionError: 해당 이름의 연결이 이미 존재하고 현재 활성 연결 세션이 있으므로 "default"라는 새 연결을 생성할 수 없습니다." 라는 에러 메세지가 나온다.
+이는 가장 첫번째 테스트로 인해 'default' 라는 이름의 DB 연결이 생성되었고, 연결 세션이 활성화 중이나, beforeEach 함수에 있는 'Test.createTestingModule' 모듈에 의해 다시 DB 연결을 시도하게 되어 발생하는 에러이다.
+
+모든 테스트를 진행하기 위해
+beforeEach 메소드 아래 afterEach 메소드를 작성하자
+
+afterEach(async () => {
+  await app.close();
+});
+
+매 테스트가 종료될때마다 어플리케이션을 종료하는 내용이다.
 ```
 
 

@@ -34,9 +34,11 @@ export class UsersController {
 
   @ApiOperation({ summary: ' 내 정보 가져오기' })
   @Get()
+  // 브라우저의 쿠키에서 JWT 정보를 가져와 파싱 및 해석한다.
   @UseGuards(JwtAuthGuard)
-  // JwtAuthGuard에서 user를 리턴받아 OnlyPrivateInterceptor에게 넘김
+  // JwtAuthGuard에서 user를 리턴받아 OnlyPrivateInterceptor에게 넘긴다.
   @UseInterceptors(OnlyPrivateInterceptor)
+  // 설명이 복잡해보이지만 역할을 '현재 사용자가 제대로 로그인 하였는가' 검사하는 것이다.
   async getCurrentUser(@CurrentUser() currentUser: UserDTO) {
     return currentUser;
   }
@@ -57,7 +59,7 @@ export class UsersController {
       userLoginDTO.email,
       userLoginDTO.password,
     );
-    response.cookie('jwt', jwt, { httpOnly: true });
+    response.cookie('jwt', jwt, { httpOnly: true }).status(200);
     return user;
   }
 
