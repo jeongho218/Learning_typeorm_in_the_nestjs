@@ -145,7 +145,27 @@ DB에서 설정한 타임존과 함께 저장한다는 의미
 
 백엔드 개발을 하면서, 특히 RDBMS로 작업할 하면서 SQL 문법을 몰라서는 안됨
 SQL 튜토리얼 - https://www.w3schools.com/sql/default.asp
+```
 
+
+- 'AlreadyHasActiveConnectionError' 에러 해결
+```
+app.module.ts
+TypeOrmModuleOptions에서 주석으로 설정했었던
+keepConnectionAlive 옵션을 true로 설정하였다.
+
+이 옵션은 어플리케이션이 종료되어도 DB 연결을 끊지 않겠다는 옵션이다.
+default는 false이며, 어플리케이션 종료 시 DB 연결도 끊어진다.
+
+이 옵션이 없으면 작업 중 e2e 테스트 시
+"이미 'default'라는 이름의 DB 연결 및 활성화 된 세션이 있어 같은 이름으로 DB 연결을 할 수 없습니다."는 에러가 발생한다.
+
+이후 'AlreadyHasActiveConnectionError: Cannot create a new connection named "default"' 에러 해결
+
+app.e2e-spec.ts
+afterEach(async () => {await app.close()}); 메소드 제거
+
+관련 내용 - https://ctrs.tistory.com/472
 ```
 
 

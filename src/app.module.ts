@@ -27,7 +27,10 @@ const typeOrmModuleOptions = {
     // 마이그레이션 후에는 false로 바꿀 것
     autoLoadEntities: true,
     logging: true,
-    // keepConnectionAlive: true,
+    keepConnectionAlive: true,
+    // 어플리케이션 종료 시 DB연결을 끊을 것인지에 대한 옵션, default는 false이다.
+    // 이 옵션이 없으면 e2e 테스트 시
+    // "이미 'default'라는 이름의 DB 연결 및 활성화 된 세션이 있어 같은 이름으로 DB 연결을 할 수 없습니다."는 에러가 발생함
   }),
   inject: [ConfigService],
 };

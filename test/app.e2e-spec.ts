@@ -16,9 +16,12 @@ describe('AppController (e2e)', () => {
   });
 
   // 테스트 2개 이상 사용할 경우 필요한 메소드, memo.txt 참조
-  afterEach(async () => {
-    await app.close();
-  });
+  // afterEach(async () => {
+  //   await app.close();
+  // });
+  // 이 메소드는 더 이상 쓰이지 않는다.
+  // app.module.ts에서 keepConnectionAlive: true 옵션을 줌으로써
+  // 어플리케이션이 종료되어도 DB 연결을 유지하도록 하였다.
 
   it('/ (GET)', () => {
     return request(app.getHttpServer())
