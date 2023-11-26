@@ -24,7 +24,8 @@ export abstract class CommonEntity {
   updatedAt: Date;
 
   // Soft Delete : 기존에는 null, 삭제시에 timestamp를 찍는다.
-  @Exclude()
+  @Exclude() // 리턴값에서 이 컬럼은 제외한다.
+  // 이 기능은 main.ts의 ClassSerializerInterceptor에 의해 활성화된다.
   @DeleteDateColumn({ type: 'timestamptz' })
   deletedAt?: Date | null;
 }

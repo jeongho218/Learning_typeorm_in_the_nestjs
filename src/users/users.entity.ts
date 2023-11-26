@@ -18,7 +18,8 @@ export class UserEntity extends CommonEntity {
   @Column({ type: 'varchar', nullable: false })
   username: string;
 
-  @Exclude()
+  @Exclude() // 리턴값에서 이 컬럼은 제외한다.
+  // 이 기능은 main.ts의 ClassSerializerInterceptor에 의해 활성화된다.
   @Column({ type: 'varchar', nullable: false })
   password: string;
 

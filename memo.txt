@@ -103,12 +103,48 @@ afterEach(async () => {
 
 - [보충] 보일러플레이트 코드 업데이트
 ```
+main.ts 
 
+// 클래스의 직렬화
+this.server.useGlobalInterceptors(
+  new ClassSerializerInterceptor(this.server.get(Reflector)),
+);
+
+엔터티에서 Exclude 데코레이터가 붙은 컬럼은 리턴되는 필드에서 제외됨
+users.entity.ts의 경우 'password' 컬럼에 Exclude가 붙어
+회원가입, 로그인 시 패스워드에 관한 데이터는 리턴 내용에서 제외되었음
 ```
 
 
 - 요구사항에 맞는 도메인 설계, ERD 모델링에 대하여
 ```
+블로그 모듈 생성
+$ nest generate module blogs
+
+태그 모듈 생성
+$ nest generate module tags
+
+방문자 모듈 생성
+$ nest generate module visitors
+
+프로필 모듈 생성
+$ nest generate module profiles
+
+각 도메인에 엔터티 생성
+id, createdAt, updatedAt, deletedAt 컬럼은 CommonEntity에서 상속받는다.
+
+id는 uuid이다. autoIncrements로 바꿔도 무방하다.
+
+@CreateDateColumn({
+  type: 'timestamptz',
+})
+createdAt: Date;
+
+timestamptz은 timestamp with time zone, 
+DB에서 설정한 타임존과 함께 저장한다는 의미
+
+백엔드 개발을 하면서, 특히 RDBMS로 작업할 하면서 SQL 문법을 몰라서는 안됨
+SQL 튜토리얼 - https://www.w3schools.com/sql/default.asp
 
 ```
 

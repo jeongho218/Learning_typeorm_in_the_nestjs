@@ -82,6 +82,9 @@ class Application {
     this.server.useGlobalInterceptors(
       new ClassSerializerInterceptor(this.server.get(Reflector)),
     );
+    // 엔터티에서 Exclude 데코레이터가 붙은 컬럼은 리턴되는 필드에서 제외됨
+    // users.entity.ts의 경우 'password' 컬럼에 Exclude가 붙어
+    // 회원가입, 로그인 시 패스워드에 관한 데이터는 리턴 내용에서 제외되었음
 
     this.server.useGlobalFilters(new HttpApiExceptionFilter());
   }
