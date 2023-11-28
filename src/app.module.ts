@@ -10,6 +10,10 @@ import { BlogsModule } from './blogs/blogs.module';
 import { TagsModule } from './tags/tags.module';
 import { VisitorsModule } from './visitors/visitors.module';
 import { ProfilesModule } from './profiles/profiles.module';
+import { BlogEntity } from './blogs/blogs.entity';
+import { ProfileEntity } from './profiles/profiles.entity';
+import { TagEntity } from './tags/tags.entity';
+import { VisitorEntity } from './visitors/visitors.entity';
 
 const typeOrmModuleOptions = {
   useFactory: async (
@@ -22,8 +26,8 @@ const typeOrmModuleOptions = {
     username: configService.get('DB_USERNAME'),
     password: configService.get('DB_PASSWORD'),
     database: configService.get('DB_NAME'),
-    entities: [UserEntity],
-    synchronize: true, //! set 'false' in production
+    entities: [UserEntity, BlogEntity, ProfileEntity, TagEntity, VisitorEntity],
+    synchronize: false, //! set 'false' in production
     // 마이그레이션 후에는 false로 바꿀 것
     autoLoadEntities: true,
     logging: true,

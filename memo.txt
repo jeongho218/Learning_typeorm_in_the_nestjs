@@ -171,5 +171,65 @@ afterEach(async () => {await app.close()}); 메소드 제거
 
 - 엔티티간에 관계에 대하여
 ```
+공식 문서
+https://typeorm.io/relations
 
+일대일 관계일때 (ex. user-profile)
+@OneToOne
+
+
+일대다 관계일때 (ex. user-blog)
+@OneToMany (상대 테이블에선 @ManyToOne)
+
+
+다대다 관계일때 (ex. blog-tag)
+@ManyToMany (상대 테이블에서도 @ManyToMany)
+
+예를 들어 블로그와 태그의 경우 하나의 블로그에 여러 개의 태그가 사용될 수 있고,
+하나의 태그가 여러 블로그에서 사용될 수 있다.
+
+이런 다대다 관계에는 두 테이블 사이에 매개 테이블이 하나 더 필요하다 (ERD의 BLOG_TAG 테이블 참조)
+
+이 작업을 위해 @JoinTable 메소드를 사용한다
+
+예시
+  @JoinTable({
+    // blogs와 tag의 중간 매개 테이블을 생성
+    name: 'BLOG_TAG', // 매개 테이블의 이름
+    joinColumn: {
+      // 자기 자신 엔터티 (blogs)
+      referencedColumnName: 'id', // 매개 테이블로 보낼 컬럼
+      name: 'blog_id', // 매개 테이블에서 쓰일 컬럼명
+    },
+    inverseJoinColumn: {
+      // 상대 엔터티(tag)
+      referencedColumnName: 'id', // 매개 테이블로 가져올 컬럼
+      name: 'tag_id', // 매개 테이블에서 쓰일 컬럼명
+    },
+  })
+
+
+외래키 가져오기 
+@JoinColumn
+
+예시
+@JoinColumn({ name: 'profile_id', referencedColumnName: 'id' })
+name인 'referencedColumnName'는 상대 엔터티에서 가져올 컬럼
+'name'은 해당 컬럼을 이 엔터티에서 사용할때의 컬럼명
+
+다른 엔터티에서 키를 가져오는 엔터티에서만 작성하며
+다른 엔터티에 키를 제공하는 엔터티에서는 JoinColumn을 작성하지 않는다.
+
+
+cascade 옵션
+예시 (cascade: true)
+엔터티에 대한 작업 내용이 해당 엔터티를 참조하고 있는
+하위 엔터티에도 적용된다.
+
+onDelete 옵션
+CASCADE: 외래키로 참조하고 있는 데이터가 삭제되면
+해당 데이터를 참조 중이던 데이터도 함께 삭제된다.
+
+SET NULL: 외래키로 참조하고 있는 데이터가 삭제되면
+해당 데이터를 참조 중이던 데이터에서는 null로 표시된다.
 ```
